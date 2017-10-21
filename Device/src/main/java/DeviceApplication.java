@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -21,6 +22,11 @@ import java.util.Scanner;
  */
 public class DeviceApplication {
 
+
+    private static String[] genericNames;
+    private static Random randomGenerator;
+    private static String device_key_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Device\\Device_Keys\\";
+    private static String hub_key_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Hub\\Hub_Keys\\";
 
     /**
      * Reads a public key from a file
@@ -55,24 +61,37 @@ public class DeviceApplication {
 
     }
 
+    private static String generateRandomUsername () {
+        String sensorName = genericNames[randomGenerator.nextInt(genericNames.length)];
+        sensorName = sensorName + "-" + String.valueOf(randomGenerator.nextInt(200));
+        return sensorName;
+    }
+
     public static void main(String args[]) throws Exception {
+        genericNames = new String[]{"MCE", "WTR", "IS", "IR", "HR"};
+        randomGenerator = new Random();
+
         val sc = new Scanner(System.in);
 
-        System.out.print("Hostname: ");
-        val hostname = sc.nextLine();
+        //System.out.print("Hostname: ");
+        //val hostname = sc.nextLine();
 
-        System.out.print("Port: ");
-        val port = sc.nextInt();
-        sc.nextLine();
+        val hostname = "localhost";
 
-        System.out.print("Username: ");
-        val username = sc.nextLine();
+        //System.out.print("Port: ");
+        //val port = sc.nextInt();
+        //sc.nextLine();
+        val port = 8080;
 
-        System.out.print("Your private key location: ");
-        val privateKeyLocation = sc.nextLine();
+        //System.out.print("Username: ");
+        //val username = sc.nextLine();
+        val username = generateRandomUsername();
 
-        System.out.print("Peer's public key location: ");
-        val publicKeyLocation = sc.nextLine();
+        System.out.print("Your private key filename: ");
+        val privateKeyLocation = device_key_path + sc.nextLine();
+
+        System.out.print("Hub's public key filename: ");
+        val publicKeyLocation = hub_key_path + sc.nextLine();
 
         val peersPublicKey = readPublicKeyFromFile(publicKeyLocation);
         val myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);

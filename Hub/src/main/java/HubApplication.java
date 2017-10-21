@@ -19,6 +19,8 @@ import java.util.Scanner;
  */
 public class HubApplication {
 
+    private static String hub_keys_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Hub\\Hub_Keys\\";
+
     /**
      * Reads a private key from a file
      *
@@ -38,8 +40,8 @@ public class HubApplication {
     public static void main(String[] args) {
         val sc = new Scanner(System.in);
 
-        System.out.print("Hub's private key location: ");
-        val privateKeyLocation = sc.nextLine();
+        System.out.print("Hub's private key filename: ");
+        val privateKeyLocation = hub_keys_path + sc.nextLine();
 
         val myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
 
