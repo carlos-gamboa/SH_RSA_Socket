@@ -11,10 +11,10 @@
         <module name="Hub" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Device" target="1.5" />
-      <module name="Hub" target="1.5" />
-      <module name="SH_RSA_Socket" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="Device" target="1.8" />
+      <module name="Hub" target="1.8" />
+      <module name="SH_RSA_Socket" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
