@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 /**
  * Created by luka on 6.7.17..
+ *
+ * Adapted by   Carlos Gamboa Vargas
+ *              Carlos Portuguéz Ubeda
+ *              Ana Laura Vargas
+ *
  */
 @Log
 public class Hub_Handler implements OnConnectListener {

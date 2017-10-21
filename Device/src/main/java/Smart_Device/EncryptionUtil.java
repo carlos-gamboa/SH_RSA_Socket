@@ -12,7 +12,12 @@ import java.io.ObjectOutputStream;
 import java.security.*;
 
 /**
- * Created by luka on 5.7.17..
+ * Created by luka on 6.7.17..
+ *
+ * Adapted by   Carlos Gamboa Vargas
+ *              Carlos Portuguéz Ubeda
+ *              Ana Laura Vargas
+ *
  */
 @SuppressWarnings("WeakerAccess")
 public class EncryptionUtil {

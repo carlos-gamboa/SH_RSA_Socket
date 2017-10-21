@@ -15,6 +15,11 @@ import java.security.PrivateKey;
 
 /**
  * Created by luka on 6.7.17..
+ *
+ * Adapted by   Carlos Gamboa Vargas
+ *              Carlos Portuguéz Ubeda
+ *              Ana Laura Vargas
+ *
  */
 @Log
 public class Device_Handler implements OnConnectToHub {

@@ -1,9 +1,5 @@
 package Smart_Device;
 
-/**
- * Created by luka on 5.7.17..
- */
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -15,7 +11,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Created by luka on 5.7.17..
+ * Created by luka on 6.7.17..
+ *
+ * Adapted by   Carlos Gamboa Vargas
+ *              Carlos Portuguéz Ubeda
+ *              Ana Laura Vargas
+ *
  */
 @Log
 public class Device {
