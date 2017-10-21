@@ -12,30 +12,43 @@ import java.util.ArrayList;
  * Created by luka on 6.7.17..
  *
  * Adapted by   Carlos Gamboa Vargas
- *              Carlos Portuguéz Ubeda
- *              Ana Laura Vargas
+ *              Carlos Portuguez Ubeda
+ *              Ana Laura Vargas Ramírez
  *
  */
 @Log
 public class Hub_Handler implements OnConnectListener {
 
-    private ArrayList<Device> clients;
+    private ArrayList<Device> devices;
 
+    /**
+     * Creates a new Hub_Handler
+     */
     public Hub_Handler() {
-        clients = new ArrayList<>();
+        devices = new ArrayList<>();
     }
 
+    /**
+     * Overrides onConnect method.
+     *
+     * @param device Device you want to connect.
+     */
     @Override
-    public void onConnect(@NonNull Device client) {
-        clients.add(client);
-        startClientThread(client);
+    public void onConnect(@NonNull Device device) {
+        devices.add(device);
+        startClientThread(device);
     }
 
-    private void startClientThread(@NonNull Device client) {
+    /**
+     * Starts a new Device thread.
+     *
+     * @param device The Device you want to start.
+     */
+    private void startClientThread(@NonNull Device device) {
         new Thread(() -> {
             while (true) {
                 try {
-                    val bytesSentByClient = (byte[]) client.getObjectInputStream().readObject();
+                    val bytesSentByClient = (byte[]) device.getObjectInputStream().readObject();
                     broadcast(bytesSentByClient);
                 } catch (EOFException ex) {
                     log.warning("Client closed connection");
@@ -48,12 +61,17 @@ public class Hub_Handler implements OnConnectListener {
         }).start();
     }
 
+    /**
+     * Broadcasts a message to all devices.
+     *
+     * @param bytes Message you want to broadcast.
+     */
     private void broadcast(@NonNull byte[] bytes) {
-        clients.forEach(client -> {
+        devices.forEach(device -> {
             try {
-                client.getObjectOutputStream().writeObject(bytes);
+                device.getObjectOutputStream().writeObject(bytes);
             } catch (IOException e) {
-                log.warning("Cannot send bytes to client: " + client.getSocket().getInetAddress() + ":" + client.getSocket().getPort());
+                log.warning("Cannot send bytes to client: " + device.getSocket().getInetAddress() + ":" + device.getSocket().getPort());
                 e.printStackTrace();
             }
         });

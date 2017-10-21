@@ -15,8 +15,8 @@ import java.security.*;
  * Created by luka on 6.7.17..
  *
  * Adapted by   Carlos Gamboa Vargas
- *              Carlos Portuguéz Ubeda
- *              Ana Laura Vargas
+ *              Carlos Portuguez Ubeda
+ *              Ana Laura Vargas Ramírez
  *
  */
 @SuppressWarnings("WeakerAccess")
@@ -28,6 +28,9 @@ public class EncryptionUtil {
 
     public static final String PUBLIC_KEY_FILE = "public.key";
 
+    /**
+     * Generates a new set of keys for RSA.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void generateKey() {
         try {
@@ -63,6 +66,13 @@ public class EncryptionUtil {
 
     }
 
+    /**
+     * Encrypts a text using RSA.
+     *
+     * @param text The text you want to encrypt.
+     * @param key The PublicKey of RSA.
+     * @return The ciphered text.
+     */
     public static byte[] encrypt(String text, PublicKey key) {
         byte[] cipherText = null;
         try {
@@ -75,6 +85,18 @@ public class EncryptionUtil {
         return cipherText;
     }
 
+    /**
+     * Decrypts a ciphered text.
+     *
+     * @param text Ciphered text.
+     * @param key Private key of RSA.
+     * @return Deciphered text.
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     */
     public static String decrypt(byte[] text, PrivateKey key) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         byte[] decryptedText;
         val cipher = Cipher.getInstance(ALGORITHM);

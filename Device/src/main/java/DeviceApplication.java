@@ -15,13 +15,19 @@ import java.util.Scanner;
  * Created by luka on 6.7.17..
  *
  * Adapted by   Carlos Gamboa Vargas
- *              Carlos Portuguéz Ubeda
- *              Ana Laura Vargas
+ *              Carlos Portuguez Ubeda
+ *              Ana Laura Vargas Ramírez
  *
  */
 public class DeviceApplication {
 
 
+    /**
+     * Reads a public key from a file
+     *
+     * @param path Path to the public key file/
+     * @return PublicKey|null
+     */
     private static PublicKey readPublicKeyFromFile(@NonNull String path) {
         try {
             return (PublicKey) new ObjectInputStream(new FileInputStream(path)).readObject();
@@ -32,6 +38,12 @@ public class DeviceApplication {
         return null;
     }
 
+    /**
+     * Reads a private key from a file
+     *
+     * @param path Path to the private key file/
+     * @return PrivateKey|null
+     */
     private static PrivateKey readPrivateKeyFromFile(@NonNull String path) {
         try {
             return (PrivateKey) new ObjectInputStream(new FileInputStream(path)).readObject();
@@ -66,8 +78,8 @@ public class DeviceApplication {
         val myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
 
 
-        val client = new Device(hostname, port);
-        client.connectToServer(new Device_Handler(myPrivateKey));
+        val device = new Device(hostname, port);
+        device.connectToServer(new Device_Handler(myPrivateKey));
 
         //noinspection InfiniteLoopStatement
         while (true) {
@@ -75,7 +87,7 @@ public class DeviceApplication {
                 String rawText = username + ": " + sc.nextLine();
 
                 val encryptedText = EncryptionUtil.encrypt(rawText, peersPublicKey);
-                client.getServer().getObjectOutputStream().writeObject(encryptedText);
+                device.getHub().getObjectOutputStream().writeObject(encryptedText);
             }
         }
     }

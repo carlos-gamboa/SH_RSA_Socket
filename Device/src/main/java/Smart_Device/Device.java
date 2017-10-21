@@ -14,8 +14,8 @@ import java.net.Socket;
  * Created by luka on 6.7.17..
  *
  * Adapted by   Carlos Gamboa Vargas
- *              Carlos Portuguéz Ubeda
- *              Ana Laura Vargas
+ *              Carlos Portuguez Ubeda
+ *              Ana Laura Vargas Ramírez
  *
  */
 @Log
@@ -24,31 +24,42 @@ public class Device {
     private int port;
 
     @Getter
-    private Hub server;
+    private Hub hub;
 
+    /**
+     * Creates a new Device
+     *
+     * @param hostname Device's hostname.
+     * @param port Device's port.
+     */
     public Device(@NonNull String hostname, int port) {
         this.hostname = hostname;
         this.port = port;
     }
 
+    /**
+     * Connects the Device to a server
+     *
+     * @param onMessageReceivedListener OnConnectToHub instance.
+     */
     public void connectToServer(@NonNull OnConnectToHub onMessageReceivedListener) {
-        Socket serverSocket;
+        Socket hubSocket;
         try {
-            serverSocket = new Socket(hostname, port);
-            val objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
-            val objectInputStream = new ObjectInputStream(serverSocket.getInputStream());
+            hubSocket = new Socket(hostname, port);
+            val objectOutputStream = new ObjectOutputStream(hubSocket.getOutputStream());
+            val objectInputStream = new ObjectInputStream(hubSocket.getInputStream());
 
-            server = Hub.builder()
+            hub = Hub.builder()
                     .objectInputStream(objectInputStream)
-                    .socket(serverSocket)
+                    .socket(hubSocket)
                     .objectOutputStream(objectOutputStream)
                     .build();
 
-            onMessageReceivedListener.onConnectToHub(server);
+            onMessageReceivedListener.onConnectToHub(hub);
 
 
         } catch (IOException e) {
-            log.severe("Cannot connect to server");
+            log.severe("Cannot connect to hub");
             e.printStackTrace();
         }
     }

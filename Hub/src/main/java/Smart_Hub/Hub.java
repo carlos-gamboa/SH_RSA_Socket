@@ -15,11 +15,10 @@ import java.net.ServerSocket;
  * Created by luka on 6.7.17..
  *
  * Adapted by   Carlos Gamboa Vargas
- *              Carlos Portuguéz Ubeda
- *              Ana Laura Vargas
+ *              Carlos Portuguez Ubeda
+ *              Ana Laura Vargas Ramírez
  *
  */
-
 @Log
 public class Hub {
 
@@ -30,34 +29,45 @@ public class Hub {
     @Setter
     private int connectionDelay;
 
+    /**
+     * Creates a new Hub
+     *
+     * @param port Hub's port.
+     * @param connectionDelay Connection's Delay.
+     */
     public Hub(int port, int connectionDelay) {
         this.port = port;
         this.connectionDelay = connectionDelay;
     }
 
+    /**
+     * Listens to messages.
+     *
+     * @param onConnectListener OnConnectListener instance.
+     */
     public void listen(@NonNull OnConnectListener onConnectListener) {
         try {
-            val serverSocket = new ServerSocket(port);
+            val hubSocket = new ServerSocket(port);
 
-            log.info("Started server on port: " + Integer.toString(this.port));
+            log.info("Started hub on port: " + Integer.toString(this.port));
 
             //noinspection InfiniteLoopStatement
             while (true) {
                 try {
-                    val client = serverSocket.accept();
-                    log.info("Client " + client.getInetAddress() + " connected");
+                    val device = hubSocket.accept();
+                    log.info("Device " + device.getInetAddress() + " connected");
 
-                    val objectInputStream = new ObjectInputStream(client.getInputStream());
-                    val objectOutputStream = new ObjectOutputStream(client.getOutputStream());
+                    val objectInputStream = new ObjectInputStream(device.getInputStream());
+                    val objectOutputStream = new ObjectOutputStream(device.getOutputStream());
 
                     onConnectListener.onConnect(Device.builder()
-                            .socket(client)
+                            .socket(device)
                             .objectInputStream(objectInputStream)
                             .objectOutputStream(objectOutputStream)
                             .build());
 
                 } catch (Exception ex) {
-                    log.warning("Cannot connect client");
+                    log.warning("Cannot connect device");
                     ex.printStackTrace();
                 }
 
@@ -70,7 +80,7 @@ public class Hub {
             }
 
         } catch (IOException e) {
-            log.severe("Cannot start server");
+            log.severe("Cannot start hub");
             e.printStackTrace();
         }
 
