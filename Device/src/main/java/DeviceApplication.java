@@ -38,7 +38,7 @@ public class DeviceApplication {
         try {
             return (PublicKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print("Could not find the public key file.\nInsert hub's public key filename.\n");
         }
 
         return null;
@@ -54,7 +54,7 @@ public class DeviceApplication {
         try {
             return (PrivateKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print("Could not find the private key file.\nInsert device private key filename.\n");
         }
 
         return null;
@@ -87,15 +87,20 @@ public class DeviceApplication {
         //val username = sc.nextLine();
         val username = generateRandomUsername();
 
-        System.out.print("Your private key filename: ");
-        val privateKeyLocation = device_key_path + sc.nextLine();
+        System.out.print("Device private key filename: ");
+        PrivateKey myPrivateKey = null;
+        do {
+            val privateKeyLocation = device_key_path + sc.nextLine();
+            myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
+        }while (myPrivateKey == null);
+
 
         System.out.print("Hub's public key filename: ");
-        val publicKeyLocation = hub_key_path + sc.nextLine();
-
-        val peersPublicKey = readPublicKeyFromFile(publicKeyLocation);
-        val myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
-
+        PublicKey hub_public_key = null;
+        do {
+            val publicKeyLocation = hub_key_path + sc.nextLine();
+            hub_public_key = readPublicKeyFromFile(publicKeyLocation);
+        }while (hub_public_key == null);
 
         val device = new Device(hostname, port);
         device.connectToServer(new Device_Handler(myPrivateKey));
@@ -105,7 +110,7 @@ public class DeviceApplication {
             synchronized (System.in) {
                 String rawText = username + ": " + sc.nextLine();
 
-                val encryptedText = EncryptionUtil.encrypt(rawText, peersPublicKey);
+                val encryptedText = EncryptionUtil.encrypt(rawText, hub_public_key);
                 device.getHub().getObjectOutputStream().writeObject(encryptedText);
             }
         }

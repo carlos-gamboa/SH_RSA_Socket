@@ -55,9 +55,8 @@ public class Hub_Handler implements OnConnectListener {
         try {
             return (PublicKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print("Could not find the public key file.\n");
         }
-
         return null;
     }
 
@@ -83,13 +82,15 @@ public class Hub_Handler implements OnConnectListener {
 
         if (!device_keys.containsKey(name)) {
             val sc = new Scanner(System.in);
-
-            System.out.print("Received a message from " + name + ", who's not in your cluster.\n");
+            log.warning("Received a message from " + name + ", who's not in your cluster.");
             System.out.print("Insert " + name + "'s public key filename. If you don't want to add this device to the cluster, insert \'No\'\n");
             val publicKeyFilename = sc.nextLine();
             val publicKeyLocation = device_keys_path + publicKeyFilename;
             if (!publicKeyFilename.equals("No")) {
                 val devicesPublicKey = readPublicKeyFromFile(publicKeyLocation);
+                if (devicesPublicKey == null) {
+                    return false;
+                }
                 device_keys.put(name, devicesPublicKey);
                 return true;
             }
@@ -152,7 +153,7 @@ public class Hub_Handler implements OnConnectListener {
             Boolean added = associateDevicePublicKey(decryptedMessage);
             if (added) {
                 synchronized (System.out) {
-                    System.out.println(decryptedMessage);
+                    System.out.print(decryptedMessage);
                 }
                 sendResponseMessage(getDeviceName(decryptedMessage));
                 checkMessageKnown(decryptedMessage);

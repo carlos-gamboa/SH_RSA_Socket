@@ -31,7 +31,7 @@ public class HubApplication {
         try {
             return (PrivateKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print("Could not find the private key file.\nInsert Hub's private key filename.\n");
         }
 
         return null;
@@ -39,13 +39,15 @@ public class HubApplication {
 
     public static void main(String[] args) {
         val sc = new Scanner(System.in);
+        PrivateKey private_key = null;
 
         System.out.print("Hub's private key filename: ");
-        val privateKeyLocation = hub_keys_path + sc.nextLine();
-
-        val myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
+        do {
+            val privateKeyLocation = hub_keys_path + sc.nextLine();
+            private_key = readPrivateKeyFromFile(privateKeyLocation);
+        }while (private_key == null);
 
         val server = new Hub(8080, 250);
-        server.listen(new Hub_Handler(myPrivateKey));
+        server.listen(new Hub_Handler(private_key));
     }
 }
