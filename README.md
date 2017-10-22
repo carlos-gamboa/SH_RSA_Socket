@@ -39,7 +39,7 @@ This app was developed by:
 
    [lklacar]: <https://github.com/lklacar>
    [analau05]: <https://github.com/analau05>
-   [carlos-gamboa]: <https://github.com/carlos-gamboa>8>
+   [carlos-gamboa]: <https://github.com/carlos-gamboa>
    [KarmanXV]: <https://github.com/KarmanXV>
 
    [IntelliJ IDEA]: <https://www.jetbrains.com/idea/>
