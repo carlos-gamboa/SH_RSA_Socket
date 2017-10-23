@@ -25,15 +25,13 @@ You are ready to run the app!
 
 ## Authors
 
-This app was developed by:
+This application was developed by:
 
-  - [Luka Klacar][lklacar]
-  
- And adapted by:
- 
   - [Ana Laura Vargas][analau05]
   - [Carlos Gamboa][carlos-gamboa]
   - [Carlos Portuguez][KarmanXV]
+  
+Based on [Luka Klacar][lklacar]'s [project][luka's_repo].
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -44,3 +42,4 @@ This app was developed by:
 
    [IntelliJ IDEA]: <https://www.jetbrains.com/idea/>
    [project_repo]: <https://github.com/carlos-gamboa/SH_RSA_Socket>
+   [luka's_repo]: <https://github.com/lklacar/java-rsa-socket-chat>
