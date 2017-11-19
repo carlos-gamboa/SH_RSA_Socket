@@ -238,7 +238,9 @@ public class Hub_Handler implements OnConnectListener {
      */
     private void checkMessageKnown (String message) {
         StringTokenizer tokens = new StringTokenizer(message, ":");
-        String name = tokens.nextToken();
+        StringTokenizer tokens2 = new StringTokenizer(tokens.nextToken(), "*");
+        String name = tokens2.nextToken();
+        name = tokens2.nextToken();
         String full_message = tokens.nextToken();
         String data = "";
         StringTokenizer command_Tokens = new StringTokenizer(full_message, "!");
