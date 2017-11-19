@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class HubApplication {
 
-    private static String hub_keys_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Hub\\Hub_Keys\\";
+    private static String hub_keys_path = "C:\\Users\\Usuario1\\IntelliJIdeaProjects\\SH_RSA_Socket\\Hub\\Hub_Keys\\private.key";
 
     /**
      * Reads a private key from a file
@@ -41,9 +41,9 @@ public class HubApplication {
         val sc = new Scanner(System.in);
         PrivateKey private_key = null;
 
-        System.out.print("Hub's private key filename: ");
+        //System.out.print("Hub's private key filename: ");
         do {
-            val privateKeyLocation = hub_keys_path + sc.nextLine();
+            val privateKeyLocation = hub_keys_path;// + sc.nextLine();
             private_key = readPrivateKeyFromFile(privateKeyLocation);
         }while (private_key == null);
 

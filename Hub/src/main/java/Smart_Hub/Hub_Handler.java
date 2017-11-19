@@ -29,10 +29,11 @@ import java.util.*;
 public class Hub_Handler implements OnConnectListener {
 
     private ArrayList<Device> devices;
+    private ArrayList<String> deniedDevices;
     private Map<String, PublicKey> device_keys;
     private PrivateKey myPrivateKey;
 
-    private String device_keys_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Device\\Device_Keys\\";
+    private String device_keys_path = "C:\\Users\\Usuario1\\IntelliJIdeaProjects\\SH_RSA_Socket\\Device\\Device_Keys\\";
 
     /**
      * Creates a Hub Handler to manage the messages.
@@ -41,6 +42,7 @@ public class Hub_Handler implements OnConnectListener {
      */
     public Hub_Handler(@NonNull PrivateKey myPrivateKey) {
         devices = new ArrayList<>();
+        deniedDevices = new ArrayList<>();
         device_keys = new HashMap<String, PublicKey>();
         this.myPrivateKey = myPrivateKey;
     }
@@ -55,7 +57,7 @@ public class Hub_Handler implements OnConnectListener {
         try {
             return (PublicKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.print("Could not find the public key file.\n");
+            System.out.println("Could not find the public key file.");
         }
         return null;
     }
@@ -79,27 +81,44 @@ public class Hub_Handler implements OnConnectListener {
      */
     private boolean associateDevicePublicKey(String message) {
         String name = getDeviceName(message);
+        PublicKey devicesPublicKey = getDevicePublicKey(message);
 
-        if (!device_keys.containsKey(name)) {
+        if (!device_keys.containsKey(name) && !deniedDevices.contains(name)) {
             val sc = new Scanner(System.in);
             log.warning("Received a message from " + name + ", who's not in your cluster.");
-            System.out.print("Insert " + name + "'s public key filename. If you don't want to add this device to the cluster, insert \'No\'\n");
-            val publicKeyFilename = sc.nextLine();
-            val publicKeyLocation = device_keys_path + publicKeyFilename;
-            if (!publicKeyFilename.equals("No")) {
-                val devicesPublicKey = readPublicKeyFromFile(publicKeyLocation);
+            System.out.println("If you want to add "+ name + " to the cluster, insert \'Yes\', else insert \'No\'");
+            String line = sc.nextLine();
+            if (line.equals("Yes")) {
                 if (devicesPublicKey == null) {
                     return false;
                 }
                 device_keys.put(name, devicesPublicKey);
                 return true;
             }
-            else {
-                System.out.print(name + " was not added to the cluster.");
+            else if (line.equals("No")){
+                System.out.println(name + " was not added to the cluster.");
+                System.out.println("If you want to add " + name + " to the black list, insert \'Yes\', else insert \'No\'");
+                if (sc.nextLine().equals("Yes")) {
+                   deniedDevices.add(name);
+                   System.out.println(name + " was added to the black list.");
+                }
+                else
+                {
+                   System.out.println(name + " was not added to the black list.");
+                }
+                return false;
+            }
+            else
+            {
+                System.out.println(name + " was not added to the cluster.");
                 return false;
             }
         }
-        else {
+        else if (deniedDevices.contains(name) && !device_keys.containsKey(name)){
+            return false;
+        }
+        else
+        {
             return true;
         }
     }
@@ -153,7 +172,9 @@ public class Hub_Handler implements OnConnectListener {
             Boolean added = associateDevicePublicKey(decryptedMessage);
             if (added) {
                 synchronized (System.out) {
-                    System.out.print(decryptedMessage);
+                    StringTokenizer tokens = new StringTokenizer(decryptedMessage, "*");
+                    int msgLength = tokens.nextToken().length();
+                    System.out.println(decryptedMessage.substring(msgLength+1));
                 }
                 sendResponseMessage(getDeviceName(decryptedMessage));
                 checkMessageKnown(decryptedMessage);
@@ -171,7 +192,23 @@ public class Hub_Handler implements OnConnectListener {
      */
     private String getDeviceName(String message) {
         StringTokenizer tokens = new StringTokenizer(message, ":");
-        return tokens.nextToken();
+        StringTokenizer tokens2 = new StringTokenizer(tokens.nextToken(), "*");
+        String filename = tokens2.nextToken();
+        filename = tokens2.nextToken();
+        return filename;
+    }
+
+    /**
+     * Gets the public key of a device based on the message they send.
+     *
+     * @param message Message received by the hub.
+     * @return Devices name.
+     */
+    private PublicKey getDevicePublicKey(String message) {
+        StringTokenizer tokens = new StringTokenizer(message, "*");
+        String filename = tokens.nextToken();
+        val path = device_keys_path + filename;
+        return readPublicKeyFromFile(path);
     }
 
     /**

@@ -25,8 +25,8 @@ public class DeviceApplication {
 
     private static String[] genericNames;
     private static Random randomGenerator;
-    private static String device_key_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Device\\Device_Keys\\";
-    private static String hub_key_path = "C:\\Users\\Dell\\Documents\\Universidad\\Redes de Computadores\\SH_RSA_Socket\\Hub\\Hub_Keys\\";
+    private static String device_key_path = "C:\\Users\\Usuario1\\IntelliJIdeaProjects\\SH_RSA_Socket\\Device\\Device_Keys\\";
+    private static String hub_key_path = "C:\\Users\\Usuario1\\IntelliJIdeaProjects\\SH_RSA_Socket\\Hub\\Hub_Keys\\";
 
     /**
      * Reads a public key from a file
@@ -68,6 +68,7 @@ public class DeviceApplication {
     }
 
     public static void main(String args[]) throws Exception {
+        String deviceName = "";
         genericNames = new String[]{"MCE", "WTR", "IS", "IR", "HR"};
         randomGenerator = new Random();
 
@@ -87,20 +88,21 @@ public class DeviceApplication {
         //val username = sc.nextLine();
         val username = generateRandomUsername();
 
-        System.out.print("Device private key filename: ");
+        System.out.print("Device type: ");//private key filename: ");
         PrivateKey myPrivateKey = null;
         do {
-            val privateKeyLocation = device_key_path + sc.nextLine();
+            deviceName = sc.nextLine();
+            val privateKeyLocation = device_key_path + deviceName + "_private.key";
             myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
         }while (myPrivateKey == null);
 
 
-        System.out.print("Hub's public key filename: ");
+        //System.out.print("Hub's public key filename: ");
         PublicKey hub_public_key = null;
-        do {
-            val publicKeyLocation = hub_key_path + sc.nextLine();
+        //do {
+            val publicKeyLocation = hub_key_path + "public.key";//sc.nextLine();
             hub_public_key = readPublicKeyFromFile(publicKeyLocation);
-        }while (hub_public_key == null);
+        //}while (hub_public_key == null);
 
         val device = new Device(hostname, port);
         device.connectToServer(new Device_Handler(myPrivateKey));
@@ -108,7 +110,7 @@ public class DeviceApplication {
         //noinspection InfiniteLoopStatement
         while (true) {
             synchronized (System.in) {
-                String rawText = username + ": " + sc.nextLine();
+                String rawText = deviceName + "_public.key*" + username + ": " + sc.nextLine();
 
                 val encryptedText = EncryptionUtil.encrypt(rawText, hub_public_key);
                 device.getHub().getObjectOutputStream().writeObject(encryptedText);
