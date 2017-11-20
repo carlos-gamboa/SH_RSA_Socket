@@ -23,6 +23,21 @@ To install the application you need to:
 
 You are ready to run the app!
 
+### To run the program:
+
+ - First, run the HubApplication.
+ - Next, run the DeviceApplication.
+ - In console, the device will ask you his type, so you can insert "motion", "light", "thermo" or "prox" because the generated keys are related to them.
+ - In case you want to run the intruder, insert "intruder" into the type of the device. That way you will intercept all the messages.
+ - You can run as many devices as you want.
+ - Type a message on the device's console.
+ - Inmediately, on the hub's console will appear a message asking you if you want to add the device to the console, follow the instructions.
+ - Based on what you type, the hub will do an action, if you type "Yes" the message sent by the device is received, but if you type "No", the hub will ask you if you want to add the device to the black list or no.
+ - If the device is now on the cluster, you can send any message between the device and the hub.
+ - If the device is on the black list, all the messages sent will be ignored.
+ - Else, the hub will continue asking what you want to do.
+ - Also, if you want to send a message to a random device that is in the same cluster type "Send!" followed by the desired message.
+
 ## Authors
 
 This application was developed by:
