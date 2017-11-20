@@ -96,6 +96,8 @@ public class DeviceApplication {
             myPrivateKey = readPrivateKeyFromFile(privateKeyLocation);
         }while (myPrivateKey == null);
 
+        Boolean intruder = (deviceName.equals("intruder"));
+
 
         //System.out.print("Hub's public key filename: ");
         PublicKey hub_public_key = null;
@@ -105,7 +107,7 @@ public class DeviceApplication {
         //}while (hub_public_key == null);
 
         val device = new Device(hostname, port);
-        device.connectToServer(new Device_Handler(myPrivateKey));
+        device.connectToServer(new Device_Handler(myPrivateKey, intruder, device));
 
         //noinspection InfiniteLoopStatement
         while (true) {

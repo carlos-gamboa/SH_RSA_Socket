@@ -9,6 +9,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -25,14 +26,18 @@ import java.security.PrivateKey;
 public class Device_Handler implements OnConnectToHub {
 
     private PrivateKey myPrivateKey;
+    private Boolean intruder;
+    private Device device;
 
     /**
      * Creates a Device Handler to manage the messages.
      *
      * @param myPrivateKey Device's private key.
      */
-    public Device_Handler(@NonNull PrivateKey myPrivateKey) {
+    public Device_Handler(@NonNull PrivateKey myPrivateKey, Boolean intruder, Device device) {
         this.myPrivateKey = myPrivateKey;
+        this.intruder = intruder;
+        this.device = device;
     }
 
     /**
@@ -55,6 +60,12 @@ public class Device_Handler implements OnConnectToHub {
             while (true) {
                 try {
                     val receivedEncryptedMessage = (byte[]) hub.getObjectInputStream().readObject();
+                    if (intruder) {
+                        System.out.println("Mensaje interceptado");
+                        System.out.println(new String(receivedEncryptedMessage, Charset.forName("UTF-8")));
+                        //System.out.println("Replicando mensaje");
+                        //device.getHub().getObjectOutputStream().writeObject(receivedEncryptedMessage);
+                    }
                     try {
                         val decryptedMessage = EncryptionUtil.decrypt(receivedEncryptedMessage, myPrivateKey);
                         synchronized (System.out) {
