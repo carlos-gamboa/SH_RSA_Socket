@@ -25,6 +25,8 @@ You are ready to run the app!
 
 ### To run the program:
 
+You have to change the variable for the path to access the devices' and hub's  keys. You have to do that on HubApplication, DeviceApplication and Hub_Handler classes.
+
  - First, run the HubApplication.
  - Next, run the DeviceApplication.
  - In console, the device will ask you his type, so you can insert "motion", "light", "thermo" or "prox" because the generated keys are related to them.
