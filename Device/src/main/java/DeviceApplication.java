@@ -54,7 +54,7 @@ public class DeviceApplication {
         try {
             return (PrivateKey) new ObjectInputStream(new FileInputStream(path)).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.print("Could not find the private key file.\nInsert device private key filename.\n");
+            System.out.print("Could not find the private key file.\nInsert the device type again.\n");
         }
 
         return null;

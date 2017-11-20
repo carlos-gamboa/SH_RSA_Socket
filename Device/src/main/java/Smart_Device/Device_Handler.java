@@ -72,14 +72,14 @@ public class Device_Handler implements OnConnectToHub {
                             System.out.println(decryptedMessage);
                         }
                     } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException ignored) {
-                        System.exit(1);
+                        //System.exit(1);
                     }
 
                 } catch (EOFException ex) {
                     log.severe("Hub closed connection");
                     break;
                 } catch (ClassNotFoundException | IOException e) {
-                    System.exit(1);
+                    //System.exit(1);
                 }
             }
         }).start();
