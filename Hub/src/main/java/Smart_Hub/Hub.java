@@ -68,20 +68,20 @@ public class Hub {
 
                 } catch (Exception ex) {
                     log.warning("Cannot connect device");
-                    ex.printStackTrace();
+                    System.exit(1);
                 }
 
                 try {
                     Thread.sleep(this.connectionDelay);
                 } catch (InterruptedException e) {
                     log.warning("Could not sleep for " + Integer.toString(this.connectionDelay) + " seconds");
-                    e.printStackTrace();
+                    System.exit(1);
                 }
             }
 
         } catch (IOException e) {
             log.severe("Cannot start hub");
-            e.printStackTrace();
+            System.exit(1);
         }
 
     }

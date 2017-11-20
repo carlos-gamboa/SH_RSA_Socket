@@ -157,7 +157,7 @@ public class Hub_Handler implements OnConnectListener {
                 device.getObjectOutputStream().writeObject(bytes);
             } catch (IOException e) {
                 log.warning("Cannot send bytes to client: " + device.getSocket().getInetAddress() + ":" + device.getSocket().getPort());
-                e.printStackTrace();
+                System.exit(1);
             }
         });
     }
@@ -181,7 +181,7 @@ public class Hub_Handler implements OnConnectListener {
                 checkMessageKnown(decryptedMessage);
             }
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException ignored) {
-
+            System.exit(1);
         }
     }
 
